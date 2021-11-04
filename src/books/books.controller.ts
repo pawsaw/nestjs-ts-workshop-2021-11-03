@@ -1,30 +1,36 @@
-import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Request, Response } from 'express';
+import { Controller, Get, HttpStatus, Param, Res } from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { books } from '../data/books';
-import { Book } from './book';
+import { Book, ISBN } from './book';
 
 @Controller('books')
 @ApiTags('books')
 export class BooksController {
   @Get()
-  //   @ApiOkResponse({
-  //     description: 'All books in my library',
-  //     type: Book,
-  //     isArray: true,
-  //   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'All books in my library',
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: "You're not allowed to see the library",
-  })
-  findAll(@Req() request: Request, @Res() res: Response): Book[] {
-    res.status(HttpStatus.OK);
-
-    // console.log('Request', request);
+  findAll(): Book[] {
     return books;
+  }
+
+  @Get(':isbn')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: Book,
+    description: 'The requested Book',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: "Couldn't find the book with the requested ISBN",
+  })
+  findOne(@Res() response: Response, @Param('isbn') isbn: ISBN): Response {
+    const book = books.find((book) => book.isbn === isbn) ?? null;
+
+    return response
+      .status(book ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+      .json(book);
   }
 }
