@@ -7,6 +7,7 @@ import {
   Query,
   Redirect,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 export interface Cat {
   id: number;
@@ -18,6 +19,7 @@ export interface FindAllCatsQuery {
 }
 
 @Controller('cats')
+@ApiTags('cats')
 export class CatsController {
   @Get()
   miau(): string {
