@@ -26,30 +26,20 @@ export class BooksController {
     status: HttpStatus.NOT_FOUND,
     description: "Couldn't find the book with the requested ISBN",
   })
-  async findOne(
-    @Res() response: Response,
-    @Param('isbn') isbn: ISBN,
-  ): Promise<Response> {
+  findOne(@Res() response: Response, @Param('isbn') isbn: ISBN): Response {
     // usually we use a service which returns Promise<Book | null>
     const bookPromise = Promise.resolve(
       books.find((book) => book.isbn === isbn) ?? null,
     );
 
-    const book = await bookPromise;
-    if (!book) {
-      return response.status(HttpStatus.NOT_FOUND).send();
-    } else {
-      return response.json(book);
-    }
+    bookPromise.then((book) => {
+      if (!book) {
+        return response.status(HttpStatus.NOT_FOUND).send();
+      } else {
+        return response.json(book);
+      }
+    });
 
-    // const book = await bookPromise;
-
-    // return response
-    //   .status(book ? HttpStatus.OK : HttpStatus.NOT_FOUND)
-    //   .json(book);
-
-    // return response
-    //   .status(book ? HttpStatus.OK : HttpStatus.NOT_FOUND)
-    //   .json(book);
+    return response;
   }
 }
