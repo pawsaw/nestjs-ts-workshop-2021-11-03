@@ -6,7 +6,7 @@ import { BooksService } from '../books/books.service';
 
 export interface IPublisherService {
   findOne: (isbn: ISBN) => Observable<Publisher | null>;
-  findAll: (isbn: ISBN) => Observable<Publisher[]>;
+  findAll: (name?: string) => Observable<Publisher[]>;
 }
 
 @Injectable()
