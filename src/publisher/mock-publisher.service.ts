@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { filter, map, Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Book } from '../books/book';
 import { Publisher } from '../books/publisher';
 import { books } from '../data/books';
-import { PublisherService } from './publisher.service';
+import { IPublisherService } from './publisher.service';
 
 @Injectable()
-export class MockPublisherService implements PublisherService {
+export class MockPublisherService implements IPublisherService {
   findOne(isbn: string): Observable<Publisher | null> {
     return of<Book | null>(
       books.find((book) => book.isbn === isbn) ?? null,

@@ -13,6 +13,6 @@ import { HttpBooksService } from './http-books.service';
     },
   ],
   imports: [HttpModule],
-  exports: [],
+  exports: [BooksService],
 })
 export class BooksModule {}
