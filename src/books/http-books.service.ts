@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { response } from 'express';
-import { map, firstValueFrom } from 'rxjs';
+import { map, firstValueFrom, catchError, of } from 'rxjs';
 import { Book, ISBN } from './book';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './create-book.dto';
@@ -26,6 +25,7 @@ export class HttpBooksService implements BooksService {
           }
           return response.data;
         }),
+        catchError(() => of(null)),
       ),
     );
   }
